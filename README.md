@@ -1,5 +1,3 @@
-
-````markdown
 # 🧠 BCI-Based Smart Home Control System
 
 A real-time Brain-Computer Interface (BCI) system that enables users to control smart home devices using brainwave signals from the NeuroSky MindWave Mobile 2 headset.
