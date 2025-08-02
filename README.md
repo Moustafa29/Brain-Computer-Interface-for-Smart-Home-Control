@@ -134,6 +134,7 @@ The official graduation slides are available here:
 
 Watch the live demo:
 [`BCI for Smart Home Control Demo.mp4`](demo/BCI%20for%20Smart%20Home%20control%20Demo.mp4)
+
 ---
 
 ## ✅ Requirements
