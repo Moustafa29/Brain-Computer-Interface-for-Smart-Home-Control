@@ -1,0 +1,75 @@
+{
+  "protocol": "5-fold cross-validation grouped by session_id, stratified by blink type",
+  "windows": 4049,
+  "accuracy_mean": 0.8841932024496325,
+  "accuracy_std": 0.01729726163616131,
+  "macro_f1_mean": 0.8640277367611692,
+  "macro_f1_std": 0.020504279686542188,
+  "per_class_pooled": {
+    "no blink": {
+      "precision": 0.9856801909307876,
+      "recall": 0.9642023346303502,
+      "f1-score": 0.974822974036192
+    },
+    "single": {
+      "precision": 0.8701041150223103,
+      "recall": 0.9097978227060654,
+      "f1-score": 0.8895083628991384
+    },
+    "double": {
+      "precision": 0.7561290322580645,
+      "recall": 0.7017964071856287,
+      "f1-score": 0.7279503105590062
+    }
+  },
+  "confusion_matrix_pooled": [
+    [
+      1239,
+      21,
+      25
+    ],
+    [
+      10,
+      1755,
+      164
+    ],
+    [
+      8,
+      241,
+      586
+    ]
+  ],
+  "folds": [
+    {
+      "fold": 1,
+      "test_windows": 736,
+      "accuracy": 0.8627717391304348,
+      "macro_f1": 0.8426106298342719
+    },
+    {
+      "fold": 2,
+      "test_windows": 781,
+      "accuracy": 0.8834827144686299,
+      "macro_f1": 0.8684961300068131
+    },
+    {
+      "fold": 3,
+      "test_windows": 853,
+      "accuracy": 0.8933177022274326,
+      "macro_f1": 0.8784212083217408
+    },
+    {
+      "fold": 4,
+      "test_windows": 899,
+      "accuracy": 0.8698553948832035,
+      "macro_f1": 0.8387249913333367
+    },
+    {
+      "fold": 5,
+      "test_windows": 780,
+      "accuracy": 0.9115384615384615,
+      "macro_f1": 0.8918857243096836
+    }
+  ],
+  "tensorflow": "2.21.0"
+}

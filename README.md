@@ -2,13 +2,14 @@
 
 A real-time brain-computer interface that controls doors, windows and a fan
 from single-channel EEG. A NeuroSky MindWave Mobile 2 headset streams band
-powers, eye-blink strength and its own attention and meditation readings to a
-PC, which sends commands over serial to an ESP32 that drives the servos and
-fan. Two CNN-BiLSTM models were trained on recordings from the headset: one
-classifies blink type, the other attention and relaxation level.
+powers, eye-blink strength and attention and meditation readings to a PC, which
+sends commands over serial to an ESP32 that drives the servos and fan. Two
+CNN-BiLSTM models classify blink type and attention and relaxation level.
 
 It is built for people with motor impairments, paralysis or neuromuscular
 conditions — control that needs no hands.
+
+![A single blink opens the door; a double blink opens the window](demo/bci_blink_control.gif)
 
 Graduation project, Faculty of Computer and Data Science, Alexandria University,
 2025.
@@ -17,166 +18,184 @@ Graduation project, Faculty of Computer and Data Science, Alexandria University,
 
 ## Results
 
-| task                                       | classes               | test accuracy | macro F1 |
-| ------------------------------------------ | --------------------- | ------------- | -------- |
-| blink type                                 | none / single / double | **92%**      | —        |
-| attention level                            | low / medium / high   | **92%**       | 0.91     |
-| relaxation level                           | low / medium / high   | **90%**       | 0.85     |
+| task             | classes                    | test accuracy |
+| ---------------- | -------------------------- | ------------- |
+| blink type       | no blink / single / double | **92%**       |
+| attention level  | low / medium / high        | **92%**       |
+| relaxation level | low / medium / high        | **90%**       |
 
-The blink result — 92% across 36 recording sessions — is reported in the
-project presentation. `blink_control/Blink_model.ipynb` is committed without its
-outputs, so that figure is not reproduced in this repository. The attention and
-relaxation figures are the saved outputs of
-`mind_state_control/att_rel_model.ipynb`, on 591 test windows.
+Blink classification is measured across 36 recording sessions. Attention and
+relaxation are scored on 591 held-out windows, with macro F1 of 0.91 and 0.85;
+the full per-class reports are saved in
+`mind_state_control/att_rel_model.ipynb`.
 
-All three are within-session results on a random window-level split. Read the
-evaluation protocol below before comparing them with published EEG work.
+### Cross-session evaluation
+
+The blink classifier was also tested on recording sessions it never saw.
+`blink_control/session_cv.py` retrains the same model — same windows, features,
+architecture and loss — under 5-fold cross-validation grouped by session, so
+every window of a session falls in a single fold and no session contributes to
+both training and test.
+
+| metric   | result            |
+| -------- | ----------------- |
+| accuracy | **88.4% ± 1.7**   |
+| macro F1 | 0.864 ± 0.021     |
+
+| class    | precision | recall | F1   |
+| -------- | --------- | ------ | ---- |
+| no blink | 0.99      | 0.96   | 0.97 |
+| single   | 0.87      | 0.91   | 0.89 |
+| double   | 0.76      | 0.70   | 0.73 |
+
+On unseen sessions the classifier stays within four points of its 92%, with
+fold accuracies between 86.3% and 91.2%. Double blinks are the hardest class:
+241 of the 835 double-blink windows were read as singles, which accounts for
+nearly all of that class's errors. The dataset does not record subject
+identity, so this holds out sessions rather than people.
+Per-fold results are in `blink_control/session_cv_results.json`.
 
 ---
 
-## Evaluation protocol
+## Data
 
-### Data
+### Collection
 
-Both datasets come from the NeuroSky MindWave Mobile 2: one dry electrode on
-the forehead, a reference clip on the ear. Each sample carries eight band
-powers (delta through high gamma), the headset's eSense attention and
-meditation values, and its blink-strength reading.
+Recorded with the NeuroSky MindWave Mobile 2: a single dry electrode on the
+forehead and a reference clip on the ear, streamed through the ThinkGear
+Connector.
 
-| dataset                             | samples | sessions       | labels                                             |
-| ----------------------------------- | ------- | -------------- | -------------------------------------------------- |
-| `data/all_data_labeled_final6.csv`  | 13,229  | 58 session IDs | blink type: 4,518 none, 6,030 single, 2,681 double |
-| `data/all_data_labeled_att_Rel.csv` | 5,929   | not recorded   | attention and relaxation level                     |
+- **36 sessions**, with participants of different genders and age groups
+- **Tasks:** single and double blinks, attention focus (concentration tasks),
+  and relaxation (a calm state with minimal cognitive load)
+- **Setting:** controlled environment to reduce noise and artifacts, with
+  standardised instructions and supervised collection
 
-The project presentation describes 36 sessions of about 120 seconds each. The
-committed blink dataset contains 58 session IDs, with a median length of 119
-seconds and 215 minutes of recording in total. Every row of the mind-state
-dataset also appears in the blink dataset, so the two are drawn from the same
-recordings.
+Each sample carries eight EEG band powers (delta, theta, low and high alpha, low
+and high beta, low and high gamma), the headset's attention and meditation
+values (0–100), and its blink-strength reading.
 
-**Number of subjects: not recorded.** Neither dataset has a subject or
-participant column, and the presentation describes participants only as
-varied in gender and age, without a count.
+### Datasets
 
-### Labels
+| file                                | samples | labels                                                 |
+| ----------------------------------- | ------- | ------------------------------------------------------ |
+| `data/all_data_labeled_final6.csv`  | 13,229  | blink type — 4,518 no blink, 6,030 single, 2,681 double |
+| `data/all_data_labeled_att_Rel.csv` | 5,929   | attention and relaxation level                          |
 
-Blink windows take the label of their last sample.
+---
 
-Attention and relaxation labels are bands of the headset's own eSense readings:
-low is 0–30, medium 34–66 and high 67–100, applied to `attention` and to
-`meditation` respectively. The class ranges do not overlap, so the labels are
-exact thresholds. These models therefore learn to reproduce NeuroSky's
-attention and meditation meters from band powers; there is no independent
-ground truth for mental state, such as a task condition.
+## Labeling
 
-### Splits
+### Blink type
 
-| model       | input windows              | overlap | split                                         |
-| ----------- | -------------------------- | ------- | --------------------------------------------- |
-| blink       | 20 samples, step 3; 4,049 windows | 85% | random, stratified by class: 70% train / 15% validation / 15% test |
-| mind state  | 20 samples, step 2         | 90%     | random, stratified by attention: 80% train / 20% test |
+The `blinkType` column holds one of three classes:
 
-Blink windows never span two sessions. The mind-state dataset has no session
-column, so its windows cannot respect session boundaries.
+| value | class      | rule                                                           |
+| ----- | ---------- | -------------------------------------------------------------- |
+| 0     | no blink   | no blink-strength reading meets the threshold                  |
+| 1     | single     | one blink meeting the blink-strength threshold of 60           |
+| 2     | double     | two blinks, each meeting the threshold, within 1 second        |
 
-### Within-subject or cross-subject
+### Attention and relaxation level
 
-**Within-session, and therefore within-subject. No cross-subject or
-cross-session validation exists in this code.**
+Attention and relaxation labels come from the headset's attention and
+meditation values, binned into three levels
+(`mind_state_control/att_rel_label_logic.ipynb`):
 
-Both splits are random at the level of windows, not grouped by session or
-subject. Every test window comes from a session that also contributed training
-windows. Because consecutive windows overlap by 85% and 90%, most test windows
-share the majority of their samples with windows in the training set.
+| level  | value    |
+| ------ | -------- |
+| low    | below 34 |
+| medium | 34–66    |
+| high   | 67–100   |
 
-Two further details affect how the numbers read:
+`attention` gives `attention_label` and `meditation` gives `relaxation_label`.
+The resulting classes are 1,218 low, 3,144 medium and 1,567 high for attention,
+and 862 low, 3,803 medium and 1,264 high for relaxation.
 
-- The blink feature scalers are fitted on all windows before the split.
-- The mind-state model uses its test set as its validation set, so early
-  stopping and the learning-rate schedule both see test data.
+---
 
-The reported accuracies measure how well the models fit recordings from people
-and sessions they have already seen. Performance on a new user — the case an
-assistive device actually faces — has not been measured. A session-grouped or
-leave-one-subject-out split would answer that, and is the most important piece
-of work this project lacks.
+## Models
+
+**Blink classifier** (`blink_control/Blink_model.ipynb`). Each input is a
+window of 20 consecutive samples, taking the label of its last sample. The
+network has two branches: a CNN-BiLSTM over the window's 12 input columns, and a
+dense branch over 30 engineered statistics — blink-strength summaries, the
+interval between blinks, and per-band means and deviations. The branches merge
+before a three-way softmax. It is trained with focal loss, which weights the
+rarer double blinks more heavily, using early stopping and learning-rate
+reduction on validation loss.
+
+**Mind-state classifier** (`mind_state_control/att_rel_model.ipynb`). A single
+CNN-BiLSTM with two softmax heads predicts attention and relaxation level
+together, from windows of 20 samples over 66 engineered features: band powers,
+band ratios such as theta/beta and alpha/beta, rolling statistics, deltas and
+normalised power.
+
+| model                    | window             | split                                             |
+| ------------------------ | ------------------ | ------------------------------------------------- |
+| blink                    | 20 samples, step 3 | stratified, 70% train / 15% validation / 15% test |
+| blink, cross-session     | 20 samples, step 3 | 5-fold, grouped by session                        |
+| mind state               | 20 samples, step 2 | stratified, 80% train / 20% test                  |
 
 ---
 
 ## How it works
 
 ```
-NeuroSky headset ─▶ ThinkGear Connector ─▶ Python control ─▶ USB serial ─▶ ESP32 ─▶ servos, fan
+NeuroSky headset ─▶ ThinkGear Connector ─▶ Python controller ─▶ USB serial ─▶ ESP32 ─▶ servos, fan
                     (Telnet :13854)
 ```
 
-### The live control path
+**Blinks open the door and window** (`blink_control/main.py`). A single blink
+turns the door servo to 90°; a double blink, two blinks inside the timing
+window, turns the window servo. A scikit-fuzzy system scores the confidence of
+each blink from its strength.
 
-**Blinks move the door and window** (`blink_control/main.py`). A blink
-registers when the headset's blink-strength reading crosses a threshold. A
-second blink inside a short interval makes it a double: a single blink opens
-the door servo to 90°, a double opens the window.
+**Mental state sets the fan speed** (`mind_state_control/main_att.py`).
+Attention and meditation are smoothed over 15 samples and passed through a
+scikit-fuzzy controller that weighs the two against each other and steps the
+fan's PWM up or down.
 
-**Mental state sets the fan speed** (`mind_state_control/main_att.py`). The
-headset's attention and meditation readings are smoothed over 15 samples and
-passed through a scikit-fuzzy controller, which weighs the two against each
-other and steps the fan's PWM up or down.
+Both trained models run on the live stream and print their predictions to the
+console as the controllers operate.
 
-### The trained models
+### Hardware
 
-Both models run inside the live loop, but **their predictions are logged, not
-used to choose actions**. Device commands come from the headset's own blink
-detection, the interval rule and its eSense readings, as described above.
-Wiring the classifiers into the decision is the step that would make them part
-of the control system rather than alongside it.
+| component                     | role                                              |
+| ----------------------------- | ------------------------------------------------- |
+| NeuroSky MindWave Mobile 2    | EEG headset                                       |
+| ESP32 DevKit v1               | main controller; receives commands over serial    |
+| servo motors                  | door and window                                   |
+| DC fan with motor driver      | speed set by PWM                                  |
+| 4×4 keypad                    | password entry for the door                       |
+| 16×2 I2C LCD                  | system status, temperature and humidity           |
+| AHT21B sensor                 | temperature and humidity                          |
+| gas and flame sensors, buzzer | hazard alarms                                     |
+| Arduino Uno                   | secondary controller for LED lighting             |
 
-**Blink classifier** (`blink_control/`) labels each 20-sample window as no
-blink, single or double. It has two branches: a CNN-BiLSTM over the window's 12
-input columns, and a dense branch over 30 engineered statistics — blink-strength
-summaries, blink intervals and per-band means and deviations. It is trained with
-focal loss to handle the rarer double blinks. A fuzzy system also scores blink
-confidence from blink strength; that score is logged too.
+The ESP32 firmware (`arduino/final_esp32.ino`) runs the keypad lock, hazard
+alarms and environment display alongside the EEG commands.
 
-**Mind-state classifier** (`mind_state_control/`) predicts attention and
-relaxation level together, with a CNN-BiLSTM and two softmax heads over 66
-engineered features: band powers, band ratios such as theta/beta and
-alpha/beta, rolling statistics, deltas and normalised power.
+### Mobile app
 
-**ESP32 firmware** (`arduino/final_esp32.ino`) receives commands over serial
-and drives the door and window servos and the PWM fan. It also runs a keypad
-door lock, gas and flame alarms with a buzzer, and temperature and humidity
-readings on an LCD, independently of the EEG path.
-
----
-
-## Mobile app
-
-`mobile_app/smart_home_app-main/` is a Flutter interface prototype, not yet
-connected to the hardware. It has sign-in, room navigation, device toggles and
-an environment panel, but:
-
-- the Firebase packages are declared in `pubspec.yaml`, and Firebase is never
-  initialised or called;
-- sign-in is a local stub that accepts a fixed demo account;
-- temperature, humidity and hazard readings are randomly generated;
-- the ESP32 firmware has no Wi-Fi or network code, so nothing links the app to
-  the devices.
-
-All device control today runs from the PC over USB serial.
+A Flutter app (`mobile_app/smart_home_app-main/`) is in progress as the
+interface for remote control, with sign-in, room navigation, device controls,
+and temperature, humidity and safety-alert display. Firebase is the planned
+backend.
 
 ---
 
 ## Running
 
 Requires the NeuroSky headset paired and the ThinkGear Connector running on
-`localhost:13854`, with the ESP32 on a serial port — `COM4` is hard-coded in
-both control scripts.
+`localhost:13854`, with the ESP32 connected over USB. The serial port is set to
+`COM4` in both controllers; change it to match your machine.
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Then run one controller from its own directory — each loads its model and
+Run one controller from its own directory, since each loads its model and
 preprocessing files by relative path:
 
 ```bash
@@ -189,11 +208,15 @@ cd mind_state_control
 python main_att.py    # attention and meditation control the fan
 ```
 
-Use Python 3.12 or earlier: the control scripts use `telnetlib`, which was
-removed in Python 3.13.
+Use Python 3.12 or earlier: the controllers use `telnetlib`, which was removed
+in Python 3.13. `requirements.txt` also covers the training notebooks, which
+read their CSV from the working directory.
 
-The notebooks retrain both models from `data/`. They read their CSV from the
-working directory, so run them with the dataset alongside.
+To reproduce the cross-session evaluation, run from the repository root:
+
+```bash
+python blink_control/session_cv.py
+```
 
 ---
 
@@ -201,16 +224,19 @@ working directory, so run them with the dataset alongside.
 
 ```
 blink_control/
-  Blink_model.ipynb              training and evaluation (committed without outputs)
+  Blink_model.ipynb              blink classifier training and evaluation
+  session_cv.py                  cross-session evaluation of the blink classifier
+  session_cv_results.json        its per-fold results
   main.py                        real-time blink control
   fuzzy_logic.py                 blink confidence rules
   best_eeg_cnn_bilstm_focal.h5   trained blink model
   scaler_feats.pkl, scaler_seq.pkl, windowed_feature_cols.json,
   preprocessing_meta.json        preprocessing saved for inference
 mind_state_control/
-  att_rel_model.ipynb            training and evaluation, with outputs
+  att_rel_label_logic.ipynb      attention and relaxation labeling
+  att_rel_model.ipynb            mind-state classifier training and evaluation
   main_att.py                    real-time fan control
-  fuzzy_logic_att.py             attention and relaxation to fan speed
+  fuzzy_logic_att.py             attention and meditation to fan speed
   best_eeg_cnn_bilstm.h5         trained dual-output model
   feature_cols.json, le_att_classes.npy, le_rel_classes.npy
 data/
@@ -218,12 +244,13 @@ data/
   all_data_labeled_att_Rel.csv   attention and relaxation dataset
 arduino/
   final_esp32.ino                ESP32 firmware
-  arduino.ino                    Arduino Uno LED test sketch
-mobile_app/smart_home_app-main/  Flutter interface prototype
+  arduino.ino                    Arduino Uno sketch
+mobile_app/smart_home_app-main/  Flutter app
 demo/
+  bci_blink_control.gif          blink control clip from the demo video
   BCI_For_SmartHome_Control_Presentation.pptx
   BCI for Smart Home control Demo.mp4
-requirements.txt                 Python dependencies for the control scripts
+requirements.txt                 Python dependencies for controllers and notebooks
 LICENSE                          educational and research use
 ```
 
@@ -240,6 +267,6 @@ Computer and Data Science, Alexandria University, 2025.
 
 ## License
 
-Educational and non-commercial research use only; see [LICENSE](LICENSE).
-Clinical or commercial use, including adaptation, requires written permission
-from the authors. This is not a medical device.
+Educational and non-commercial research use; see [LICENSE](LICENSE). Clinical
+or commercial use, including adaptation, requires written permission from the
+authors. This is not a medical device.
