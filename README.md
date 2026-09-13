@@ -55,11 +55,14 @@ both training and test.
 | single   | 0.87      | 0.91   | 0.89 |
 | double   | 0.76      | 0.70   | 0.73 |
 
-On unseen sessions the classifier stays within four points of its 92%, with
-fold accuracies between 86.3% and 91.2%. Double blinks are the hardest class:
-241 of the 835 double-blink windows were read as singles, which accounts for
-nearly all of that class's errors. The dataset does not record subject
-identity, so this holds out sessions rather than people.
+Under five-fold cross-validation grouped by session, the classifier reaches
+88.4% ± 1.7, with fold accuracies between 86.3% and 91.2%. The
+threshold-and-timing rule that produces the labels reaches 93.0% ± 1.0 under
+the same folds, and a variant with the blink-strength channel and its derived
+features removed reaches 65.4% ± 3.5 against a 47.5% majority baseline.
+Double blinks remain the hardest class: 241 of 835 double-blink windows were
+read as singles. The dataset does not record subject identity, so this holds
+out sessions rather than people.
 Per-fold results are in `blink_control/session_cv_results.json`.
 
 ### Architecture ablation
@@ -297,16 +300,30 @@ The graduation presentation and a demo video are in `demo/`:
 
 ## Credits
 
-Developed by Moustafa Ahmed and team as a graduation project, Faculty of
-Computer and Data Science, Alexandria University, 2025.
+### Authors
+
+Moustafa Taher, Omar Ali, Mahmoud Gamal
+
+Faculty of Computers and Data Science, Alexandria University, Alexandria, Egypt
+
+### Acknowledgments
+
+We extend our sincere gratitude to Belal Moustafa Osman, Omar Sameh Said, Hamid
+Mohamed Abdelhamid, Mohamed Ragab Mohamed, Anas Bakr Mohamed, Mina Ehab Milad,
+and Mohamed Hatem, whose support and collaboration have been essential to the
+completion of this work. We also thank the Faculty of Computers and Data
+Science, Alexandria University, for institutional support.
+
+Graduation project, Faculty of Computers and Data Science, Alexandria
+University, 2025.
 
 ## Citation
 
 <!-- TODO: replace with the published reference once the paper is out. -->
 
-> Moustafa Ahmed et al., "Brain-Computer Interface for Smart Home Control",
-> Faculty of Computer and Data Science, Alexandria University, 2025. Paper in
-> preparation.
+> Moustafa Taher, Omar Ali, Mahmoud Gamal, "MindAssist: A Hybrid CNN–BiLSTM
+> Brain–Computer Interface with Fuzzy-Logic Postprocessing for Accessible
+> Smart-Home Control Using a Single-Channel EEG Headset," submitted, 2026.
 
 ## License
 
