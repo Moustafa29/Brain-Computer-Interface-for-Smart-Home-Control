@@ -1,0 +1,243 @@
+{
+  "protocol": "5-fold session-grouped CV, stratified by blink type",
+  "windows": 4049,
+  "epochs": 100,
+  "batch": 96,
+  "minutes": 4.8,
+  "variants": {
+    "cnn": {
+      "label": "(a) CNN only",
+      "parameters": 10243,
+      "accuracy_mean": 0.6815539577488439,
+      "accuracy_std": 0.04666132459618345,
+      "macro_f1_mean": 0.5325675066975887,
+      "macro_f1_std": 0.026223035481313554,
+      "folds": [
+        {
+          "fold": 1,
+          "test_windows": 736,
+          "accuracy": 0.592391304347826,
+          "macro_f1": 0.5047116903633492
+        },
+        {
+          "fold": 2,
+          "test_windows": 781,
+          "accuracy": 0.6927016645326505,
+          "macro_f1": 0.5183131127817991
+        },
+        {
+          "fold": 3,
+          "test_windows": 853,
+          "accuracy": 0.7303634232121923,
+          "macro_f1": 0.5817282163388873
+        },
+        {
+          "fold": 4,
+          "test_windows": 899,
+          "accuracy": 0.6974416017797553,
+          "macro_f1": 0.5260864528433068
+        },
+        {
+          "fold": 5,
+          "test_windows": 780,
+          "accuracy": 0.6948717948717948,
+          "macro_f1": 0.531998061160601
+        }
+      ],
+      "pooled": {
+        "accuracy": 0.683872561126204,
+        "macro_f1": 0.538967704859058,
+        "per_class": {
+          "no blink": {
+            "precision": 0.8657142857142858,
+            "recall": 0.7073929961089495,
+            "f1-score": 0.7785867237687366
+          },
+          "single": {
+            "precision": 0.6352859135285913,
+            "recall": 0.944530844997408,
+            "f1-score": 0.7596414425682718
+          },
+          "double": {
+            "precision": 0.2900763358778626,
+            "recall": 0.045508982035928146,
+            "f1-score": 0.07867494824016563
+          }
+        },
+        "confusion_matrix": [
+          [
+            909,
+            310,
+            66
+          ],
+          [
+            80,
+            1822,
+            27
+          ],
+          [
+            61,
+            736,
+            38
+          ]
+        ]
+      }
+    },
+    "cnn_bilstm": {
+      "label": "(b) CNN + BiLSTM",
+      "parameters": 66051,
+      "accuracy_mean": 0.7805775466588265,
+      "accuracy_std": 0.01423660504820012,
+      "macro_f1_mean": 0.5964447226757161,
+      "macro_f1_std": 0.008728254854906262,
+      "folds": [
+        {
+          "fold": 1,
+          "test_windows": 736,
+          "accuracy": 0.7649456521739131,
+          "macro_f1": 0.5843139161723233
+        },
+        {
+          "fold": 2,
+          "test_windows": 781,
+          "accuracy": 0.7836107554417413,
+          "macro_f1": 0.5958731133711745
+        },
+        {
+          "fold": 3,
+          "test_windows": 853,
+          "accuracy": 0.7631887456037515,
+          "macro_f1": 0.5904533429345188
+        },
+        {
+          "fold": 4,
+          "test_windows": 899,
+          "accuracy": 0.7975528364849833,
+          "macro_f1": 0.609168255848247
+        },
+        {
+          "fold": 5,
+          "test_windows": 780,
+          "accuracy": 0.7935897435897435,
+          "macro_f1": 0.6024149850523169
+        }
+      ],
+      "pooled": {
+        "accuracy": 0.7809335638429242,
+        "macro_f1": 0.5968554614114856,
+        "per_class": {
+          "no blink": {
+            "precision": 0.9849445324881141,
+            "recall": 0.9673151750972763,
+            "f1-score": 0.9760502552021987
+          },
+          "single": {
+            "precision": 0.6895436579231046,
+            "recall": 0.9948159668221876,
+            "f1-score": 0.8145161290322581
+          },
+          "double": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1-score": 0.0
+          }
+        },
+        "confusion_matrix": [
+          [
+            1243,
+            41,
+            1
+          ],
+          [
+            7,
+            1919,
+            3
+          ],
+          [
+            12,
+            823,
+            0
+          ]
+        ]
+      }
+    },
+    "cnn_bilstm_dense": {
+      "label": "(c) CNN + BiLSTM + dense branch",
+      "parameters": 68467,
+      "accuracy_mean": 0.8841932024496325,
+      "accuracy_std": 0.01729726163616131,
+      "macro_f1_mean": 0.8640277367611692,
+      "macro_f1_std": 0.020504279686542188,
+      "folds": [
+        {
+          "fold": 1,
+          "test_windows": 736,
+          "accuracy": 0.8627717391304348,
+          "macro_f1": 0.8426106298342719
+        },
+        {
+          "fold": 2,
+          "test_windows": 781,
+          "accuracy": 0.8834827144686299,
+          "macro_f1": 0.8684961300068131
+        },
+        {
+          "fold": 3,
+          "test_windows": 853,
+          "accuracy": 0.8933177022274326,
+          "macro_f1": 0.8784212083217408
+        },
+        {
+          "fold": 4,
+          "test_windows": 899,
+          "accuracy": 0.8698553948832035,
+          "macro_f1": 0.8387249913333367
+        },
+        {
+          "fold": 5,
+          "test_windows": 780,
+          "accuracy": 0.9115384615384615,
+          "macro_f1": 0.8918857243096836
+        }
+      ],
+      "pooled": {
+        "accuracy": 0.8841689306001482,
+        "macro_f1": 0.864093882498112,
+        "per_class": {
+          "no blink": {
+            "precision": 0.9856801909307876,
+            "recall": 0.9642023346303502,
+            "f1-score": 0.974822974036192
+          },
+          "single": {
+            "precision": 0.8701041150223103,
+            "recall": 0.9097978227060654,
+            "f1-score": 0.8895083628991384
+          },
+          "double": {
+            "precision": 0.7561290322580645,
+            "recall": 0.7017964071856287,
+            "f1-score": 0.7279503105590062
+          }
+        },
+        "confusion_matrix": [
+          [
+            1239,
+            21,
+            25
+          ],
+          [
+            10,
+            1755,
+            164
+          ],
+          [
+            8,
+            241,
+            586
+          ]
+        ]
+      }
+    }
+  }
+}

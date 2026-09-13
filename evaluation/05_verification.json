@@ -1,0 +1,48 @@
+{
+  "notebook": {
+    "windows": 2955,
+    "test_windows": 591,
+    "attention": 0.9001692047377327,
+    "relaxation": 0.9035532994923858
+  },
+  "grouped_recdrop": {
+    "folds": 2,
+    "attention": 0.547487706468289,
+    "relaxation": 0.6545186609506999,
+    "attention_folds": [
+      0.7475728155339806,
+      0.3474025974025974
+    ],
+    "relaxation_folds": [
+      0.7165048543689321,
+      0.5925324675324676
+    ]
+  },
+  "grouped_noscale": {
+    "folds": 2,
+    "attention": 0.4717280292523011,
+    "relaxation": 0.6894212583532973,
+    "attention_folds": [
+      0.6155339805825243,
+      0.32792207792207795
+    ],
+    "relaxation_folds": [
+      0.7165048543689321,
+      0.6623376623376623
+    ]
+  },
+  "grouped_as_reported": {
+    "folds": 2,
+    "attention": 0.5129019039213214,
+    "relaxation": 0.6341145504980457,
+    "attention_folds": [
+      0.6524271844660194,
+      0.37337662337662336
+    ],
+    "relaxation_folds": [
+      0.6854368932038835,
+      0.5827922077922078
+    ]
+  },
+  "minutes": 2.5
+}

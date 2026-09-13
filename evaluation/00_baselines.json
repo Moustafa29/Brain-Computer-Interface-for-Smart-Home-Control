@@ -1,0 +1,110 @@
+{
+  "blink type": {
+    "accuracy_mean": 0.47459936937851416,
+    "accuracy_std": 0.027385304940778014,
+    "folds": [
+      {
+        "fold": 1,
+        "predicted_class": "single",
+        "accuracy": 0.4320652173913043,
+        "macro_f1": 0.20113851992409867
+      },
+      {
+        "fold": 2,
+        "predicted_class": "single",
+        "accuracy": 0.47247119078104993,
+        "macro_f1": 0.21391304347826087
+      },
+      {
+        "fold": 3,
+        "predicted_class": "single",
+        "accuracy": 0.4783118405627198,
+        "macro_f1": 0.21570182394924664
+      },
+      {
+        "fold": 4,
+        "predicted_class": "single",
+        "accuracy": 0.5183537263626251,
+        "macro_f1": 0.2275946275946276
+      },
+      {
+        "fold": 5,
+        "predicted_class": "single",
+        "accuracy": 0.4717948717948718,
+        "macro_f1": 0.21370499419279906
+      }
+    ]
+  },
+  "attention level": {
+    "accuracy_mean": 0.5637484343574495,
+    "accuracy_std": 0.05790165829488333,
+    "folds": [
+      {
+        "fold": 1,
+        "predicted_class": "Medium",
+        "accuracy": 0.6155339805825243,
+        "macro_f1": 0.25400641025641024
+      },
+      {
+        "fold": 2,
+        "predicted_class": "Medium",
+        "accuracy": 0.4659090909090909,
+        "macro_f1": 0.21188630490956073
+      },
+      {
+        "fold": 3,
+        "predicted_class": "Medium",
+        "accuracy": 0.5991649269311065,
+        "macro_f1": 0.2497824194952132
+      },
+      {
+        "fold": 4,
+        "predicted_class": "Medium",
+        "accuracy": 0.5290806754221389,
+        "macro_f1": 0.23067484662576687
+      },
+      {
+        "fold": 5,
+        "predicted_class": "Medium",
+        "accuracy": 0.6090534979423868,
+        "macro_f1": 0.25234441602728047
+      }
+    ]
+  },
+  "relaxation level": {
+    "accuracy_mean": 0.7162361348449158,
+    "accuracy_std": 0.02781062496731898,
+    "folds": [
+      {
+        "fold": 1,
+        "predicted_class": "Medium",
+        "accuracy": 0.7140255009107468,
+        "macro_f1": 0.2777187389302161
+      },
+      {
+        "fold": 2,
+        "predicted_class": "Medium",
+        "accuracy": 0.7338003502626971,
+        "macro_f1": 0.28215488215488216
+      },
+      {
+        "fold": 3,
+        "predicted_class": "Medium",
+        "accuracy": 0.6637744034707158,
+        "macro_f1": 0.26597131681877445
+      },
+      {
+        "fold": 4,
+        "predicted_class": "Medium",
+        "accuracy": 0.7423076923076923,
+        "macro_f1": 0.28403237674760856
+      },
+      {
+        "fold": 5,
+        "predicted_class": "Medium",
+        "accuracy": 0.7272727272727273,
+        "macro_f1": 0.2807017543859649
+      }
+    ]
+  }
+}
