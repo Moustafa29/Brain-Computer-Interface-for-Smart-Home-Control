@@ -289,14 +289,12 @@ arduino/
 mobile_app/smart_home_app-main/  Flutter app
 demo/
   bci_blink_control.gif          blink control clip from the demo video
-  BCI_For_SmartHome_Control_Presentation.pptx
   BCI for Smart Home control Demo.mp4
 requirements.txt                 Python dependencies for controllers and notebooks
 LICENSE                          educational and research use
 ```
 
-The graduation presentation and a demo video are in `demo/`:
-[presentation](demo/BCI_For_SmartHome_Control_Presentation.pptx),
+A demo video is in `demo/`:
 [demo video](demo/BCI%20for%20Smart%20Home%20control%20Demo.mp4).
 
 ---
