@@ -31,6 +31,12 @@ class BlinkDetector:
         self.blink_threshold = 60
         self.double_blink_interval = 1.0
         self.min_blink_strength = 60
+        # Minimum fuzzy confidence for a blink to count as intentional. Below
+        # this the event is treated as noise and no servo command is sent.
+        # A strength of 60 -- the threshold for an event to exist at all --
+        # already scores 0.56, so anything below that cannot reject a real
+        # blink. 0.60 is the lowest value that gates one.
+        self.fuzzy_gate = 0.60
         
         self.buf = np.zeros((self.window_size, len(self.feature_cols)), dtype=float)
         self.last_blink_time = 0
@@ -99,6 +105,13 @@ class BlinkDetector:
                     self.prediction_history.append(cnn_pred)
                     smoothed_pred = self._get_smoothed_prediction()
                     fuzzy_conf = self.fuzzy.calculate_confidence(smoothed_strength)
+                    
+                    # Gate on fuzzy confidence: a weak or ambiguous blink is
+                    # rejected here instead of being logged and acted on anyway.
+                    if fuzzy_conf < self.fuzzy_gate:
+                        print(f"[Rejected] strength={int(smoothed_strength)} | "
+                              f"fuzzy={fuzzy_conf:.2f} < gate {self.fuzzy_gate:.2f}")
+                        continue
                     
                     blink_record = {
                         'time': now,

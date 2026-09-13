@@ -49,7 +49,13 @@ class MindStateController:
         self.pwm_min = 100
         self.pwm_max = 255
         self.last_pwm = 140
-        self.pwm_step = 5
+        self.pwm_step = 5            # step at full net effect
+        # The conflict resolver returns net_effect on [-2, 2]. Anything inside
+        # the dead zone holds the current speed; beyond it the step scales with
+        # the magnitude, so a decisive state moves the fan faster than a
+        # borderline one.
+        self.net_deadzone = 0.10
+        self.net_full_scale = 1.0
 
         # ===== Model and feature tracking =====
         self.model = tf.keras.models.load_model("best_eeg_cnn_bilstm.h5")
@@ -210,18 +216,19 @@ class MindStateController:
               f"{med_color}Med:{smooth_med:.0f}(Δ{delta_med:+.1f})[{med_level}]{reset_color} | "
               f"{net_color}Net:{effects['net_effect']:+.2f}{reset_color}")
 
-        # ===== Fan Speed Stepwise Logic =====
-        if (att_color == "\033[92m" and med_color == "\033[91m") or (att_color == "\033[92m" and med_color == "\033[92m"):
-            # Going more focused: speed up
-            print("\033[92m[Focus ↑, Relax ↓ or Both ↑] Fan: FASTER\033[0m")
-            self.last_pwm = min(self.pwm_max, self.last_pwm + self.pwm_step)
-        elif (att_color == "\033[91m" and med_color == "\033[92m") or (att_color == "\033[91m" and med_color == "\033[91m"):
-            # Going more relaxed: slow down
-            print("\033[91m[Focus ↓, Relax ↑ or Both ↓] Fan: SLOWER\033[0m")
-            self.last_pwm = max(self.pwm_min, self.last_pwm - self.pwm_step)
+        # ===== Fan Speed: driven by the fuzzy net effect =====
+        net = effects['net_effect']
+        if abs(net) < self.net_deadzone:
+            print(f"\033[93m[Net {net:+.2f} within dead zone] Fan: HOLD at {self.last_pwm}\033[0m")
         else:
-            print("\033[93m[Mixed State] Fan: MODERATE\033[0m")
-            # No change
+            scale = min(1.0, abs(net) / self.net_full_scale)
+            step = max(1, int(round(self.pwm_step * scale)))
+            if net > 0:
+                self.last_pwm = min(self.pwm_max, self.last_pwm + step)
+                print(f"\033[92m[Net {net:+.2f}] Fan: FASTER by {step} -> {self.last_pwm}\033[0m")
+            else:
+                self.last_pwm = max(self.pwm_min, self.last_pwm - step)
+                print(f"\033[91m[Net {net:+.2f}] Fan: SLOWER by {step} -> {self.last_pwm}\033[0m")
 
         self._send_fan_pwm(self.last_pwm)
         self.last_attention = smooth_att
