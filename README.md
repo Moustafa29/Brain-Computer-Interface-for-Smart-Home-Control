@@ -18,16 +18,23 @@ Graduation project, Faculty of Computer and Data Science, Alexandria University,
 
 ## Results
 
-| task             | classes                    | test accuracy |
-| ---------------- | -------------------------- | ------------- |
-| blink type       | no blink / single / double | **92%**       |
-| attention level  | low / medium / high        | **92%**       |
-| relaxation level | low / medium / high        | **90%**       |
+| task                            | protocol             | accuracy        | macro F1 |
+| ------------------------------- | -------------------- | --------------- | -------- |
+| blink type                      | window-level split   | ~92%            | —        |
+| blink type                      | held-out session     | 88.4% ± 1.7     | 0.864    |
+| blink type, band powers only    | held-out session     | 65.4% ± 3.5     | 0.496    |
+| blink type, threshold rule      | held-out session     | 93.0% ± 1.0     | 0.925    |
+| blink type, majority class      | held-out session     | 47.5% ± 2.7     | 0.214    |
+| attention                       | window-level split   | 92%             | 0.91     |
+| attention                       | held-out session     | 52.6% ± 9.4     | 0.449    |
+| attention, majority class       | held-out session     | 56.4% ± 5.8     | 0.240    |
+| relaxation                      | window-level split   | 90%             | 0.85     |
+| relaxation                      | held-out session     | 69.1% ± 8.9     | 0.386    |
+| relaxation, majority class      | held-out session     | 71.6% ± 2.8     | 0.278    |
 
-Blink classification is measured across 36 recording sessions. Attention and
-relaxation are scored on 591 held-out windows, with macro F1 of 0.91 and 0.85;
-the full per-class reports are saved in
-`mind_state_control/att_rel_model.ipynb`.
+The window-level rows use a stratified random split over overlapping windows;
+the held-out-session rows use five-fold cross-validation grouped by session.
+Full tables are in [`evaluation/REPORT.md`](evaluation/REPORT.md).
 
 ### Cross-session evaluation
 
@@ -54,6 +61,20 @@ fold accuracies between 86.3% and 91.2%. Double blinks are the hardest class:
 nearly all of that class's errors. The dataset does not record subject
 identity, so this holds out sessions rather than people.
 Per-fold results are in `blink_control/session_cv_results.json`.
+
+### Architecture ablation
+
+Same windows, loss, schedule and folds; only the architecture changes, under
+the held-out-session protocol.
+
+| variant                         | parameters | accuracy | macro F1 |
+| ------------------------------- | ---------- | -------- | -------- |
+| CNN only                        | 10,243     | 68.2%    | 0.533    |
+| CNN + BiLSTM                    | 66,051     | 78.1%    | 0.596    |
+| CNN + BiLSTM + dense branch     | 68,467     | 88.4%    | 0.864    |
+
+The shared multi-task backbone uses 291,078 parameters, against 573,446 for two
+independent single-task models.
 
 ---
 
@@ -96,6 +117,11 @@ The `blinkType` column holds one of three classes:
 | 1     | single     | one blink meeting the blink-strength threshold of 60           |
 | 2     | double     | two blinks, each meeting the threshold, within 1 second        |
 
+`blinkStrength >= 60` agrees with `blinkType > 0` on 100% of samples, so blink
+versus no blink is decided entirely by the threshold, and `blinkStrength` is
+also one of the model's twelve input columns. Fuzzy confidence at strength 60
+is 0.560, so a gate below that value cannot reject a genuine event.
+
 ### Attention and relaxation level
 
 Attention and relaxation labels come from the headset's attention and
@@ -131,11 +157,15 @@ together, from windows of 20 samples over 66 engineered features: band powers,
 band ratios such as theta/beta and alpha/beta, rolling statistics, deltas and
 normalised power.
 
-| model                    | window             | split                                             |
-| ------------------------ | ------------------ | ------------------------------------------------- |
-| blink                    | 20 samples, step 3 | stratified, 70% train / 15% validation / 15% test |
-| blink, cross-session     | 20 samples, step 3 | 5-fold, grouped by session                        |
-| mind state               | 20 samples, step 2 | stratified, 80% train / 20% test                  |
+| model                | window             | windows            | split                                             |
+| -------------------- | ------------------ | ------------------ | ------------------------------------------------- |
+| blink                | 20 samples, step 3 | 4,049              | stratified, 70% train / 15% validation / 15% test |
+| blink, cross-session | 20 samples, step 3 | 4,049              | 5-fold, grouped by session                        |
+| mind state           | 20 samples, step 2 | 2,955 (591 test)   | stratified, 80% train / 20% test                  |
+
+Blink windows are confined to a single session. Mind-state windows are built
+across the concatenated file, giving 2,955, of which 591 form the 20% test
+split.
 
 ---
 
@@ -145,6 +175,11 @@ normalised power.
 NeuroSky headset ─▶ ThinkGear Connector ─▶ Python controller ─▶ USB serial ─▶ ESP32 ─▶ servos, fan
                     (Telnet :13854)
 ```
+
+Model inference runs on the host machine; the ESP32 is the actuation and
+safety controller, driving the servos and fan and running the keypad lock and
+hazard alarms. The headset emits roughly one sample per second (mean interval
+0.98 s), so a 20-sample window spans about 19.6 seconds.
 
 **Blinks open the door and window** (`blink_control/main.py`). A single blink
 turns the door servo to 90°; a double blink, two blinks inside the timing
@@ -264,6 +299,14 @@ The graduation presentation and a demo video are in `demo/`:
 
 Developed by Moustafa Ahmed and team as a graduation project, Faculty of
 Computer and Data Science, Alexandria University, 2025.
+
+## Citation
+
+<!-- TODO: replace with the published reference once the paper is out. -->
+
+> Moustafa Ahmed et al., "Brain-Computer Interface for Smart Home Control",
+> Faculty of Computer and Data Science, Alexandria University, 2025. Paper in
+> preparation.
 
 ## License
 
