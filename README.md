@@ -3,11 +3,8 @@
 A real-time brain-computer interface that controls doors, windows and a fan
 from single-channel EEG. A NeuroSky MindWave Mobile 2 headset streams band
 powers, eye-blink strength and attention and meditation readings to a PC, which
-runs inference and sends commands over serial to an ESP32 that drives the
-servos and fan. A CNN-BiLSTM model classifies blink type for door and window
-control; fan speed is set by a fuzzy controller over the headset's attention
-and meditation readings. A second CNN-BiLSTM model estimates attention and
-relaxation level and is evaluated in `evaluation/`.
+sends commands over serial to an ESP32 that drives the servos and fan. Two
+CNN-BiLSTM models classify blink type and attention and relaxation level.
 
 It is built for people with motor impairments, paralysis or neuromuscular
 conditions — control that needs no hands.
