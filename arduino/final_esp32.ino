@@ -139,9 +139,10 @@
 
   // === 2. Door/Window Control via Serial Commands (for EEG) ===
   void openDoorByAngle(int angle) {
-    if (currentState != NORMAL) return; // Don't open during alert
+    if (currentState != NORMAL) { Serial.println("ACK:DOOR:BLOCKED"); return; } // Don't open during alert
     showOnLCD("Door Opened (EEG)");
     doorServo.write(angle);
+    Serial.println("ACK:DOOR");  // lets the laptop timestamp the servo command
     delay(1500);
     doorServo.write(0);
     showOnLCD("Door Closed");
@@ -149,9 +150,10 @@
     showOnLCD("Temp:","--C  Hum: --%");
   }
   void openWindowByAngle(int angle) {
-    if (currentState != NORMAL) return;
+    if (currentState != NORMAL) { Serial.println("ACK:WINDOW:BLOCKED"); return; }
     showOnLCD("Window Opened (EEG)");
     windowServo.write(angle);
+    Serial.println("ACK:WINDOW");  // lets the laptop timestamp the servo command
     delay(1500);
     windowServo.write(0);
     showOnLCD("Window Closed");
