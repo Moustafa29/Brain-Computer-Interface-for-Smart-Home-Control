@@ -1,0 +1,26 @@
+{
+  "A_training_inputs": {
+    "windows": 4049,
+    "accuracy": 0.9138058779945666,
+    "macro_f1": 0.9005796200193078,
+    "blink_windows_predicted_no_blink": 0.001808972503617945,
+    "mean_p_noblink_on_blink_windows": 0.00776224210858345,
+    "max_abs_scaled_time_feature": 3.850715398788452
+  },
+  "B_unix_time": {
+    "windows": 4049,
+    "accuracy": 0.31736231168189677,
+    "macro_f1": 0.16060492438445195,
+    "blink_windows_predicted_no_blink": 1.0,
+    "mean_p_noblink_on_blink_windows": 1.0,
+    "max_abs_scaled_time_feature": 12257479.0
+  },
+  "C_unix_time_and_live_packets": {
+    "windows": 4049,
+    "accuracy": 0.31736231168189677,
+    "macro_f1": 0.16060492438445195,
+    "blink_windows_predicted_no_blink": 1.0,
+    "mean_p_noblink_on_blink_windows": 1.0,
+    "max_abs_scaled_time_feature": 12257479.0
+  }
+}

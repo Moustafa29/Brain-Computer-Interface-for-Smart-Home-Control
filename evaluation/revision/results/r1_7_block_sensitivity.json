@@ -1,0 +1,94 @@
+{
+  "block_size_1": {
+    "blocks": 57,
+    "rule": {
+      "accuracy_mean": 0.9299549915607253,
+      "accuracy_std": 0.010456575436421083,
+      "macro_f1_mean": 0.9248847337203102
+    },
+    "random_forest": {
+      "accuracy_mean": 0.9280437409217276,
+      "accuracy_std": 0.01281960512755832,
+      "macro_f1_mean": 0.9223693102420615
+    },
+    "logistic_regression": {
+      "accuracy_mean": 0.9145455717022847,
+      "accuracy_std": 0.013318106250487436,
+      "macro_f1_mean": 0.9076075244220041
+    },
+    "rf_band_power_only": {
+      "accuracy_mean": 0.6993831827931862,
+      "accuracy_std": 0.03014753343106907,
+      "macro_f1_mean": 0.5585763374262451
+    }
+  },
+  "block_size_2": {
+    "blocks": 29,
+    "rule": {
+      "accuracy_mean": 0.9293300831089899,
+      "accuracy_std": 0.018151488994053076,
+      "macro_f1_mean": 0.9240302701429043
+    },
+    "random_forest": {
+      "accuracy_mean": 0.9278744944818683,
+      "accuracy_std": 0.016379229357539722,
+      "macro_f1_mean": 0.9220913989536511
+    },
+    "logistic_regression": {
+      "accuracy_mean": 0.9106085252753531,
+      "accuracy_std": 0.020367049173137756,
+      "macro_f1_mean": 0.9027365301705155
+    },
+    "rf_band_power_only": {
+      "accuracy_mean": 0.6979282652015064,
+      "accuracy_std": 0.04175441691843038,
+      "macro_f1_mean": 0.5605677220379233
+    }
+  },
+  "block_size_3": {
+    "blocks": 20,
+    "rule": {
+      "accuracy_mean": 0.9288961870252592,
+      "accuracy_std": 0.01069561186421271,
+      "macro_f1_mean": 0.9212348591828645
+    },
+    "random_forest": {
+      "accuracy_mean": 0.9277750738526539,
+      "accuracy_std": 0.011291149862968032,
+      "macro_f1_mean": 0.9196495368986355
+    },
+    "logistic_regression": {
+      "accuracy_mean": 0.9125539468442486,
+      "accuracy_std": 0.013669356447645543,
+      "macro_f1_mean": 0.9028557366794218
+    },
+    "rf_band_power_only": {
+      "accuracy_mean": 0.690719330312346,
+      "accuracy_std": 0.0416871446212046,
+      "macro_f1_mean": 0.5508376131314023
+    }
+  },
+  "block_size_5": {
+    "blocks": 12,
+    "rule": {
+      "accuracy_mean": 0.9295978414657091,
+      "accuracy_std": 0.007813007314240497,
+      "macro_f1_mean": 0.918949172284198
+    },
+    "random_forest": {
+      "accuracy_mean": 0.929417790834194,
+      "accuracy_std": 0.010693799948349552,
+      "macro_f1_mean": 0.9187270956759527
+    },
+    "logistic_regression": {
+      "accuracy_mean": 0.9107029859239993,
+      "accuracy_std": 0.014392090755329757,
+      "macro_f1_mean": 0.896071876608261
+    },
+    "rf_band_power_only": {
+      "accuracy_mean": 0.6962397028500196,
+      "accuracy_std": 0.04032758119262691,
+      "macro_f1_mean": 0.5508074091414212
+    }
+  }
+}

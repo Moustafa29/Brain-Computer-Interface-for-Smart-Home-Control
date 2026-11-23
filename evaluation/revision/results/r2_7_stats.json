@@ -1,0 +1,156 @@
+{
+  "sessions": 57,
+  "windows": 4049,
+  "detectors": {
+    "rule": {
+      "pooled_accuracy": 0.9301061990614967,
+      "ci95_session_bootstrap": [
+        0.9135329806228667,
+        0.9478652926554385
+      ],
+      "per_session_accuracy": {
+        "min": 0.8173076923076923,
+        "p25": 0.9,
+        "median": 0.9565217391304348,
+        "p75": 1.0,
+        "max": 1.0
+      }
+    },
+    "random_forest (30 feat)": {
+      "pooled_accuracy": 0.9281304025685354,
+      "ci95_session_bootstrap": [
+        0.9102714881596977,
+        0.9462403208065061
+      ],
+      "per_session_accuracy": {
+        "min": 0.8173076923076923,
+        "p25": 0.8981481481481481,
+        "median": 0.9523809523809523,
+        "p75": 1.0,
+        "max": 1.0
+      }
+    },
+    "logistic_regression (30 feat)": {
+      "pooled_accuracy": 0.914546801679427,
+      "ci95_session_bootstrap": [
+        0.8968434488735896,
+        0.9334594340803806
+      ],
+      "per_session_accuracy": {
+        "min": 0.7788461538461539,
+        "p25": 0.8828828828828829,
+        "median": 0.9230769230769231,
+        "p75": 0.96,
+        "max": 1.0
+      }
+    },
+    "svm (30 feat)": {
+      "pooled_accuracy": 0.8965176586811558,
+      "ci95_session_bootstrap": [
+        0.8766132445902014,
+        0.9180453789482215
+      ],
+      "per_session_accuracy": {
+        "min": 0.7727272727272727,
+        "p25": 0.8558558558558559,
+        "median": 0.9019607843137255,
+        "p75": 0.9565217391304348,
+        "max": 1.0
+      }
+    },
+    "random_forest (band power only)": {
+      "pooled_accuracy": 0.7009138058779946,
+      "ci95_session_bootstrap": [
+        0.6512518230927801,
+        0.7586840577959221
+      ],
+      "per_session_accuracy": {
+        "min": 0.4840764331210191,
+        "p25": 0.5913978494623656,
+        "median": 0.7419354838709677,
+        "p75": 0.8925619834710744,
+        "max": 1.0
+      }
+    },
+    "majority": {
+      "pooled_accuracy": 0.4764139293652754,
+      "ci95_session_bootstrap": [
+        0.38064007103239095,
+        0.5744822201611992
+      ],
+      "per_session_accuracy": {
+        "min": 0.0,
+        "p25": 0.07692307692307693,
+        "median": 0.19047619047619047,
+        "p75": 0.6138613861386139,
+        "max": 1.0
+      }
+    }
+  },
+  "paired_vs_rule": {
+    "random_forest (30 feat)": {
+      "windows_rule_right_model_wrong": 17,
+      "windows_model_right_rule_wrong": 9,
+      "mcnemar_exact_p": 0.16863754391670227,
+      "sessions_rule_better": 10,
+      "sessions_model_better": 4,
+      "sessions_tied": 43,
+      "wilcoxon_p_sessions": 0.030286568823091303
+    },
+    "logistic_regression (30 feat)": {
+      "windows_rule_right_model_wrong": 96,
+      "windows_model_right_rule_wrong": 33,
+      "mcnemar_exact_p": 2.547560886850772e-08,
+      "sessions_rule_better": 34,
+      "sessions_model_better": 5,
+      "sessions_tied": 18,
+      "wilcoxon_p_sessions": 3.641891155764168e-07
+    },
+    "svm (30 feat)": {
+      "windows_rule_right_model_wrong": 139,
+      "windows_model_right_rule_wrong": 3,
+      "mcnemar_exact_p": 1.712351746995257e-37,
+      "sessions_rule_better": 39,
+      "sessions_model_better": 1,
+      "sessions_tied": 17,
+      "wilcoxon_p_sessions": 3.849627925475797e-08
+    },
+    "random_forest (band power only)": {
+      "windows_rule_right_model_wrong": 1098,
+      "windows_model_right_rule_wrong": 170,
+      "mcnemar_exact_p": 1.521014255863686e-166,
+      "sessions_rule_better": 54,
+      "sessions_model_better": 0,
+      "sessions_tied": 3,
+      "wilcoxon_p_sessions": 1.6234942929838554e-10
+    },
+    "majority": {
+      "windows_rule_right_model_wrong": 2120,
+      "windows_model_right_rule_wrong": 283,
+      "mcnemar_exact_p": 0.0,
+      "sessions_rule_better": 51,
+      "sessions_model_better": 0,
+      "sessions_tied": 6,
+      "wilcoxon_p_sessions": 5.131873597230234e-10
+    }
+  },
+  "cnn_bilstm_vs_rule_fold_level": {
+    "rule_folds": [
+      0.9158,
+      0.9283,
+      0.9426,
+      0.9221,
+      0.941
+    ],
+    "cnn_folds": [
+      0.8628,
+      0.8835,
+      0.8933,
+      0.8699,
+      0.9115
+    ],
+    "folds_rule_better": 5,
+    "exact_sign_test_two_sided_p": 0.0625,
+    "note": "window-level CNN predictions were not committed; fold-level only until the CNN is re-run"
+  }
+}

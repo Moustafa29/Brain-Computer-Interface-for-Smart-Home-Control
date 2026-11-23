@@ -1,0 +1,387 @@
+{
+  "deployed_spec": {
+    "input_mf": {
+      "weak": [
+        "trimf",
+        [
+          0,
+          0,
+          69
+        ]
+      ],
+      "ramp": [
+        "trimf",
+        [
+          50,
+          70,
+          170
+        ]
+      ],
+      "strong": [
+        "trimf",
+        [
+          120,
+          170,
+          200
+        ]
+      ]
+    },
+    "output_mf": {
+      "low": [
+        "trimf",
+        [
+          0,
+          0,
+          0.5
+        ]
+      ],
+      "mid": [
+        "trimf",
+        [
+          0.4,
+          0.7,
+          0.9
+        ]
+      ],
+      "high": [
+        "trimf",
+        [
+          0.7,
+          1.0,
+          1.0
+        ]
+      ]
+    },
+    "rules": [
+      "weak -> low",
+      "ramp -> mid",
+      "strong -> high"
+    ],
+    "inference": "Mamdani (scikit-fuzzy defaults: min implication, max aggregation)",
+    "defuzzification": "centroid",
+    "calibration": "none; breakpoints set by hand"
+  },
+  "corrected_spec": {
+    "input_universe": [
+      0,
+      255
+    ],
+    "input_mf": {
+      "weak": [
+        "trimf",
+        [
+          0,
+          0,
+          60
+        ]
+      ],
+      "medium": [
+        "trimf",
+        [
+          0,
+          60,
+          170
+        ]
+      ],
+      "strong": [
+        "trapmf",
+        [
+          60,
+          170,
+          255,
+          255
+        ]
+      ]
+    },
+    "output_universe": [
+      0.0,
+      1.2
+    ],
+    "output_mf": {
+      "low": [
+        "trimf",
+        [
+          0.0,
+          0.2,
+          0.4
+        ]
+      ],
+      "mid": [
+        "trimf",
+        [
+          0.4,
+          0.6,
+          0.8
+        ]
+      ],
+      "high": [
+        "trimf",
+        [
+          0.8,
+          1.0,
+          1.2
+        ]
+      ]
+    },
+    "rules": [
+      "weak -> low",
+      "medium -> mid",
+      "strong -> high"
+    ],
+    "inference": "Mamdani, min implication, max aggregation",
+    "defuzzification": "centroid"
+  },
+  "curve_points": {
+    "0": {
+      "deployed": 0.17,
+      "corrected": 0.2
+    },
+    "40": {
+      "deployed": 0.2,
+      "corrected": 0.45
+    },
+    "55": {
+      "deployed": 0.46,
+      "corrected": 0.54
+    },
+    "58": {
+      "deployed": 0.53,
+      "corrected": 0.58
+    },
+    "59": {
+      "deployed": 0.54,
+      "corrected": 0.59
+    },
+    "60": {
+      "deployed": 0.56,
+      "corrected": 0.6
+    },
+    "61": {
+      "deployed": 0.57,
+      "corrected": 0.61
+    },
+    "62": {
+      "deployed": 0.59,
+      "corrected": 0.61
+    },
+    "63": {
+      "deployed": 0.6,
+      "corrected": 0.62
+    },
+    "65": {
+      "deployed": 0.62,
+      "corrected": 0.63
+    },
+    "70": {
+      "deployed": 0.67,
+      "corrected": 0.66
+    },
+    "80": {
+      "deployed": 0.67,
+      "corrected": 0.7
+    },
+    "90": {
+      "deployed": 0.67,
+      "corrected": 0.73
+    },
+    "100": {
+      "deployed": 0.66,
+      "corrected": 0.76
+    },
+    "110": {
+      "deployed": 0.66,
+      "corrected": 0.79
+    },
+    "120": {
+      "deployed": 0.66,
+      "corrected": 0.81
+    },
+    "140": {
+      "deployed": 0.74,
+      "corrected": 0.87
+    },
+    "170": {
+      "deployed": 0.9,
+      "corrected": 1.0
+    },
+    "200": {
+      "deployed": 1.0,
+      "corrected": 1.0
+    },
+    "255": {
+      "deployed": 1.0,
+      "corrected": 1.0
+    }
+  },
+  "confidence_at_60": {
+    "deployed": 0.56,
+    "corrected": 0.6
+  },
+  "lowest_strength_passing_0.60": {
+    "deployed": 63,
+    "corrected": 60
+  },
+  "monotonicity_violations": {
+    "deployed": 6,
+    "corrected": 0,
+    "deployed_examples": [
+      [
+        96,
+        0.67,
+        0.66
+      ],
+      [
+        178,
+        0.9,
+        0.89
+      ],
+      [
+        185,
+        0.89,
+        0.88
+      ],
+      [
+        190,
+        0.88,
+        0.87
+      ],
+      [
+        194,
+        0.87,
+        0.86
+      ],
+      [
+        198,
+        0.86,
+        0.85
+      ]
+    ]
+  },
+  "event_strength_percentiles": {
+    "1": 62.0,
+    "5": 68.0,
+    "10": 77.0,
+    "25": 106.0,
+    "50": 151.0,
+    "75": 201.0,
+    "90": 233.0,
+    "95": 244.0,
+    "99": 253.0
+  },
+  "events_total": 8711,
+  "events_with_strength_60_62": 134,
+  "sweep": {
+    "deployed": [
+      {
+        "gate": null,
+        "accuracy_vs_blinkType": 0.9345377579560058,
+        "events_rejected": 0,
+        "strength_threshold_implied": null
+      },
+      {
+        "gate": 0.5,
+        "accuracy_vs_blinkType": 0.9345377579560058,
+        "events_rejected": 0,
+        "strength_threshold_implied": 57
+      },
+      {
+        "gate": 0.55,
+        "accuracy_vs_blinkType": 0.9345377579560058,
+        "events_rejected": 0,
+        "strength_threshold_implied": 60
+      },
+      {
+        "gate": 0.6,
+        "accuracy_vs_blinkType": 0.9254667775342051,
+        "events_rejected": 134,
+        "strength_threshold_implied": 63
+      },
+      {
+        "gate": 0.65,
+        "accuracy_vs_blinkType": 0.9063421271449089,
+        "events_rejected": 412,
+        "strength_threshold_implied": 68
+      },
+      {
+        "gate": 0.7,
+        "accuracy_vs_blinkType": 0.7096530349988661,
+        "events_rejected": 3297,
+        "strength_threshold_implied": 130
+      },
+      {
+        "gate": 0.75,
+        "accuracy_vs_blinkType": 0.675712449920629,
+        "events_rejected": 3808,
+        "strength_threshold_implied": 141
+      },
+      {
+        "gate": 0.8,
+        "accuracy_vs_blinkType": 0.6384458386877315,
+        "events_rejected": 4358,
+        "strength_threshold_implied": 152
+      },
+      {
+        "gate": 0.9,
+        "accuracy_vs_blinkType": 0.5184065311059037,
+        "events_rejected": 6137,
+        "strength_threshold_implied": 170
+      }
+    ],
+    "corrected": [
+      {
+        "gate": null,
+        "accuracy_vs_blinkType": 0.9345377579560058,
+        "events_rejected": 0,
+        "strength_threshold_implied": null
+      },
+      {
+        "gate": 0.5,
+        "accuracy_vs_blinkType": 0.9345377579560058,
+        "events_rejected": 0,
+        "strength_threshold_implied": 49
+      },
+      {
+        "gate": 0.55,
+        "accuracy_vs_blinkType": 0.9345377579560058,
+        "events_rejected": 0,
+        "strength_threshold_implied": 56
+      },
+      {
+        "gate": 0.6,
+        "accuracy_vs_blinkType": 0.9345377579560058,
+        "events_rejected": 0,
+        "strength_threshold_implied": 60
+      },
+      {
+        "gate": 0.65,
+        "accuracy_vs_blinkType": 0.9063421271449089,
+        "events_rejected": 412,
+        "strength_threshold_implied": 68
+      },
+      {
+        "gate": 0.7,
+        "accuracy_vs_blinkType": 0.8698314309471615,
+        "events_rejected": 941,
+        "strength_threshold_implied": 79
+      },
+      {
+        "gate": 0.75,
+        "accuracy_vs_blinkType": 0.8230402902713735,
+        "events_rejected": 1616,
+        "strength_threshold_implied": 94
+      },
+      {
+        "gate": 0.8,
+        "accuracy_vs_blinkType": 0.7628694534734296,
+        "events_rejected": 2488,
+        "strength_threshold_implied": 113
+      },
+      {
+        "gate": 0.9,
+        "accuracy_vs_blinkType": 0.6455514400181419,
+        "events_rejected": 4251,
+        "strength_threshold_implied": 150
+      }
+    ]
+  }
+}
